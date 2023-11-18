@@ -45,4 +45,7 @@ After launching the application, users can:
 
 - `main.py`: Main application file. This is the entry point of the application.
 - `login_screen.py`: Contains the `LoginScreen` class, responsible for the user login interface and functionality.
-- `dashboard_scree
+- `dashboard_screen.py`: Contains the `DashboardScreen` class, which is the main interface after login.
+- `settings_screen.py`: Contains the `SettingsScreen` class, allowing users to modify their application settings.
+- `db_module.py`: Manages database connections and user authentication logic.
+- `style.qss`: Contains the CSS styling for the application's UI.
