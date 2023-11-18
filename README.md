@@ -4,5 +4,6 @@ Run the following after installing Python:
 
 pip install PyQt5
 pip install pyqt5-tools
-pip install pyqt5-tools
+
+
 
