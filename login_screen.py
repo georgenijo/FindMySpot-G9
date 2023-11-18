@@ -43,6 +43,14 @@ class LoginScreen(QWidget):
         else:
             self.login_status_label.setText('Invalid username or password')
 
+        if self.db.validate_login(username, password):
+            self.login_status_label.setText('')
+            self.stacked_widget.setCurrentIndex(1)
+            self.clearInputs()
+        else:
+            self.login_status_label.setText('Invalid username or password')
+
+
     def register(self):
         username = self.username_input.text()
         password = self.password_input.text()
@@ -57,3 +65,11 @@ class LoginScreen(QWidget):
 
         self.db.add_user(username, password)
         self.login_status_label.setText("Registration successful")
+        
+        if self.db.add_user(username, password):
+            self.login_status_label.setText("Registration successful")
+            self.clearInputs()
+        
+    def clearInputs(self):
+        self.username_input.setText('')
+        self.password_input.setText('')
