@@ -1,51 +1,8 @@
 import sys
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QStackedWidget
-)
-from PyQt5.QtCore import Qt
-
-# Ensure db_module.py and settings_screen.py are set up correctly
+from PyQt5.QtWidgets import QApplication, QStackedWidget, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 from db_module import Database
 from settings_screen import SettingsScreen
 
-# Define the stylesheet to be applied to the whole application
-stylesheet = """
-QWidget {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #333;
-    background: #f0f0f0;
-}
-
-QLabel {
-    color: #555;
-}
-
-QLineEdit {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-QPushButton {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #eee;
-    color: #333;
-}
-
-QPushButton:hover {
-    background-color: #ddd;
-}
-
-QPushButton:pressed {
-    background-color: #ccc;
-}
-"""
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db):
         super().__init__()
@@ -54,8 +11,6 @@ class LoginScreen(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setStyleSheet(stylesheet)  # Apply the stylesheet to the LoginScreen
-
         self.username_label = QLabel('Username', self)
         self.username_input = QLineEdit(self)
         self.password_label = QLabel('Password', self)
@@ -66,7 +21,6 @@ class LoginScreen(QWidget):
         self.register_button = QPushButton('Register', self)
 
         self.login_status_label = QLabel('', self)
-        self.login_status_label.setStyleSheet("color: red;")
 
         layout = QVBoxLayout()
         layout.addWidget(self.username_label)
@@ -114,7 +68,6 @@ class DashboardScreen(QWidget):
         self.initUI()
 
     def initUI(self):
-        # Initialize dashboard UI components
         self.dashboard_label = QLabel('Dashboard - Main app functionality', self)
         self.settings_button = QPushButton('Settings', self)
         self.settings_button.clicked.connect(self.gotoSettings)
@@ -143,8 +96,12 @@ class MainApp(QApplication):
         self.stacked_widget.addWidget(self.dashboard_screen)
         self.stacked_widget.addWidget(self.settings_screen)
 
-        self.setStyleSheet(stylesheet)  # Apply the stylesheet to the entire application
+        self.loadStylesheet("style.qss")
         self.stacked_widget.show()
+
+    def loadStylesheet(self, filename):
+        with open(filename, "r") as file:
+            self.setStyleSheet(file.read())
 
 if __name__ == '__main__':
     app = MainApp(sys.argv)
