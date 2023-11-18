@@ -13,9 +13,13 @@ class Database:
 
     def get_user(self, username):
         return self.users.find_one({"username": username})
+    
+    def user_exists(self, username):
+        return self.users.find_one({"username": username}) is not None
 
     def validate_login(self, username, password):
         user_data = self.get_user(username)
         if user_data and bcrypt.checkpw(password.encode('utf-8'), user_data['password']):
             return True
         return False
+
