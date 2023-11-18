@@ -1,19 +1,10 @@
 import sys
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QStackedWidget
-)
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QStackedWidget, QHBoxLayout
 from PyQt5.QtCore import Qt
 
+from db_module import Database
 from settings_screen import SettingsScreen
 
-class Database:
-    def validate_login(self, username, password):
-        return True  # Dummy validation
-
-    def add_user(self, username, password):
-        print(f"Added user: {username}")
-
-# Login screen class
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db):
         super().__init__()
@@ -22,32 +13,28 @@ class LoginScreen(QWidget):
         self.initUI()
 
     def initUI(self):
-        # Create a QVBoxLayout for the main layout
-        layout = QVBoxLayout()
-
-        # Add input fields
-        username_label = QLabel('Username', self)
+        self.username_label = QLabel('Username', self)
         self.username_input = QLineEdit(self)
-        password_label = QLabel('Password', self)
+        self.password_label = QLabel('Password', self)
         self.password_input = QLineEdit(self)
         self.password_input.setEchoMode(QLineEdit.Password)
 
-        layout.addWidget(username_label)
+        self.login_button = QPushButton('Login', self)
+        self.register_button = QPushButton('Register', self)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.username_label)
         layout.addWidget(self.username_input)
-        layout.addWidget(password_label)
+        layout.addWidget(self.password_label)
         layout.addWidget(self.password_input)
+        layout.addWidget(self.login_button)
+        layout.addWidget(self.register_button)
 
-        # Add buttons
-        login_button = QPushButton('Login', self)
-        login_button.clicked.connect(self.login)
-        register_button = QPushButton('Register', self)
-        register_button.clicked.connect(self.register)
-
-        layout.addWidget(login_button)
-        layout.addWidget(register_button)
-
-        # Set the main layout for the widget
         self.setLayout(layout)
+        self.setWindowTitle('FindMySpot - Login')
+
+        self.login_button.clicked.connect(self.login)
+        self.register_button.clicked.connect(self.register)
 
     def login(self):
         username = self.username_input.text()
@@ -55,6 +42,8 @@ class LoginScreen(QWidget):
         if self.db.validate_login(username, password):
             print("Login successful")
             self.stacked_widget.setCurrentIndex(1)  # Proceed to dashboard
+        else:
+            print("Invalid username or password")
 
     def register(self):
         username = self.username_input.text()
@@ -65,7 +54,6 @@ class LoginScreen(QWidget):
         else:
             print("Username and password cannot be empty")
 
-# Dashboard screen class
 class DashboardScreen(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
@@ -73,27 +61,33 @@ class DashboardScreen(QWidget):
         self.initUI()
 
     def initUI(self):
-        # Create a QVBoxLayout for the main layout
+        self.header_label = QLabel('Find My Spot\nParking made easy', self)
+        self.header_label.setAlignment(Qt.AlignCenter)
+
+        self.map_placeholder = QLabel('Picture of a Map', self)
+        self.map_placeholder.setAlignment(Qt.AlignCenter)
+        self.map_placeholder.setStyleSheet("background-color: grey; height: 200px;")
+
+        self.find_lot_button = QPushButton('Find a Lot', self)
+        self.settings_button = QPushButton('Settings', self)
+        self.settings_button.clicked.connect(self.gotoSettings)
+
         layout = QVBoxLayout()
+        layout.addWidget(self.header_label)
+        layout.addWidget(self.map_placeholder)
 
-        # Add a label
-        dashboard_label = QLabel('Dashboard - Main app functionality', self)
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(self.find_lot_button)
+        buttons_layout.addWidget(self.settings_button)
 
-        layout.addWidget(dashboard_label)
+        layout.addLayout(buttons_layout)
 
-        # Add a button
-        settings_button = QPushButton('Settings', self)
-        settings_button.clicked.connect(self.gotoSettings)
-
-        layout.addWidget(settings_button)
-
-        # Set the main layout for the widget
         self.setLayout(layout)
+        self.setWindowTitle('Dashboard')
 
     def gotoSettings(self):
         self.stacked_widget.setCurrentIndex(2)  # Proceed to settings
 
-# Main application class
 class MainApp(QApplication):
     def __init__(self, args):
         super().__init__(args)
@@ -102,7 +96,7 @@ class MainApp(QApplication):
         self.db = Database()
         self.login_screen = LoginScreen(self.stacked_widget, self.db)
         self.dashboard_screen = DashboardScreen(self.stacked_widget)
-        self.settings_screen = SettingsScreen(self.stacked_widget, 1)
+        self.settings_screen = SettingsScreen(self.stacked_widget, 1)  # Pass the stacked_widget and dashboard index
 
         self.stacked_widget.addWidget(self.login_screen)
         self.stacked_widget.addWidget(self.dashboard_screen)

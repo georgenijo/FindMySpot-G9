@@ -3,7 +3,7 @@ import bcrypt
 
 class Database:
     def __init__(self):
-        self.client = MongoClient("mongodb://localhost:27017/")  # Update as needed
+        self.client = MongoClient("mongodb://localhost:27017")  # Update as needed
         self.db = self.client['findmyspot_db']
         self.users = self.db['users']
 
