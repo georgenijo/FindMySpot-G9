@@ -27,6 +27,7 @@ Before running the application, ensure you have the following installed (This wa
 - bcrypt
 
 You can install PyQt5, MongoDB, and bcrypt using pip:
+
 pip install PyQt5 pymongo bcrypt
 
 git clone https://github.com/yourusername/findmyspot.git
