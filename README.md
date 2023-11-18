@@ -20,7 +20,7 @@ FindMySpot is a desktop application built using PyQt5, designed to streamline pa
 ## Setup
 
 ### Prerequisites
-Before running the application, ensure you have the following installed:
+Before running the application, ensure you have the following installed (This was built using Python 3.12):
 - Python 3.x
 - PyQt5
 - MongoDB
