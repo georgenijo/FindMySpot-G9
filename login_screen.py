@@ -40,6 +40,7 @@ class LoginScreen(QWidget):
         if self.db.validate_login(username, password):
             self.login_status_label.setText('')
             self.stacked_widget.setCurrentIndex(1)
+            
         else:
             self.login_status_label.setText('Invalid username or password')
 
