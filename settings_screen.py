@@ -1,47 +1,58 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
 
 class SettingsScreen(QWidget):
-    def __init__(self, stacked_widget, dashboard_index=1):
+    def __init__(self, stacked_widget, main_app):
         super().__init__()
         self.stacked_widget = stacked_widget
-        self.dashboard_index = dashboard_index
+        self.main_app = main_app  # reference to MainApp to access other screens
         self.initUI()
 
     def initUI(self):
-        # Create a QVBoxLayout for the main layout
         layout = QVBoxLayout()
 
-        # Add buttons for settings options
-        settings_buttons = [
-            ('User Management', 'Edit'),
-            ('Notifications', 'Edit'),
-            ('Payment Information', 'Edit'),
-            ('Parking Preferences', 'Edit'),
-            ('Map Settings', 'Edit'),
-            ('Privacy Settings', 'Edit'),
-            ('Help and Support', 'Edit')
-        ]
+        # Create buttons for each setting option and connect them to their handlers
+        self.user_management_button = QPushButton('User Management - Edit', self)
+        self.user_management_button.clicked.connect(lambda: self.gotoScreen(self.main_app.user_management_screen))
 
-        for option, button_text in settings_buttons:
-            button = QPushButton(f'{option} - {button_text}', self)
-            button.clicked.connect(self.onButtonClick)
-            layout.addWidget(button)
+        self.notifications_button = QPushButton('Notifications - Edit', self)
+        self.notifications_button.clicked.connect(lambda: self.gotoScreen(self.main_app.notifications_screen))
 
-        # Add a back button
-        back_button = QPushButton('Back to Dashboard', self)
-        back_button.clicked.connect(self.gotoDashboard)
-        layout.addWidget(back_button)
+        self.payment_info_button = QPushButton('Payment Information - Edit', self)
+        self.payment_info_button.clicked.connect(lambda: self.gotoScreen(self.main_app.payment_info_screen))
 
-        # Set the main layout for the widget
+        self.parking_preferences_button = QPushButton('Parking Preferences - Edit', self)
+        self.parking_preferences_button.clicked.connect(lambda: self.gotoScreen(self.main_app.parking_preferences_screen))
+
+        self.map_settings_button = QPushButton('Map Settings - Edit', self)
+        self.map_settings_button.clicked.connect(lambda: self.gotoScreen(self.main_app.map_settings_screen))
+
+        self.privacy_settings_button = QPushButton('Privacy Settings - Edit', self)
+        self.privacy_settings_button.clicked.connect(lambda: self.gotoScreen(self.main_app.privacy_settings_screen))
+
+        self.help_support_button = QPushButton('Help and Support - Edit', self)
+        self.help_support_button.clicked.connect(lambda: self.gotoScreen(self.main_app.help_support_screen))
+
+        self.back_button = QPushButton('Back to Dashboard', self)
+        self.back_button.clicked.connect(self.gotoDashboard)
+
+        # Add buttons to the layout
+        layout.addWidget(self.user_management_button)
+        layout.addWidget(self.notifications_button)
+        layout.addWidget(self.payment_info_button)
+        layout.addWidget(self.parking_preferences_button)
+        layout.addWidget(self.map_settings_button)
+        layout.addWidget(self.privacy_settings_button)
+        layout.addWidget(self.help_support_button)
+        layout.addWidget(self.back_button)
+
         self.setLayout(layout)
 
-    def onButtonClick(self):
-        # Handle button click event for settings options
-        sender = self.sender()
-        if sender:
-            button_text = sender.text()
-            print(f'Clicked: {button_text}')
+    def gotoScreen(self, screen):
+        index = self.stacked_widget.indexOf(screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Screen not found in QStackedWidget")
 
     def gotoDashboard(self):
-        # Change the current widget of the stacked_widget to Dashboard
-        self.stacked_widget.setCurrentIndex(self.dashboard_index)
+        self.stacked_widget.setCurrentIndex(1)
