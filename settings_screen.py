@@ -48,6 +48,10 @@ class SettingsScreen(QWidget):
             else:
                 button.clicked.connect(self.onButtonClick)
             layout.addWidget(button)
+        
+        self.back_to_dashboard_button = QPushButton('Back to Dashboard', self)
+        self.back_to_dashboard_button.clicked.connect(self.gotoDashboard)
+        layout.addWidget(self.back_to_dashboard_button)
 
         # Set the main layout for the widget
         self.setLayout(layout)
@@ -113,7 +117,15 @@ class SettingsScreen(QWidget):
         if index != -1:
             self.stacked_widget.setCurrentIndex(index)
         else:
-            print("Help and Support Screen not found in QStackedWidget")
+            print("Help and Support Screen not found in QStackedWidget")    
+
+    def gotoDashboard(self):
+        # Switch to the Dashboard Screen
+        index = self.stacked_widget.indexOf(self.main_app.dashboard_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Dashboard Screen not found in QStackedWidget")
 
     # Additional methods to handle navigation to other screens as needed
     # Example:
