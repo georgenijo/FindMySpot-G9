@@ -1,5 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
 from user_management_screen import UserManagementScreen
+from notifications_screen import NotificationsScreen
+from payment_information_screen import PaymentInformationScreen
+from parking_preferences_screen import ParkingPreferencesScreen
+from map_settings_screen import MapSettingsScreen
+from privacy_settings_screen import PrivacySettingsScreen
+from help_support_screen import HelpScreen
+
 
 class SettingsScreen(QWidget):
     def __init__(self, stacked_widget, main_app):
@@ -26,6 +33,18 @@ class SettingsScreen(QWidget):
             button = QPushButton(f'{option} - {button_text}', self)
             if option == 'User Management':
                 button.clicked.connect(self.gotoUserManagementScreen)
+            if option == 'Notifications':
+                button.clicked.connect(self.gotoNotificationsScreen)
+            if option == 'Payment Information':
+                button.clicked.connect(self.gotoPaymentInformationScreen)
+            if option == 'Parking Preferences':
+                button.clicked.connect(self.gotoParkingPreferencesScreen)
+            if option == 'Map Settings':
+                button.clicked.connect(self.gotoMapSettingsScreen)
+            if option == 'Privacy Settings':
+                button.clicked.connect(self.gotoPrivacySettingsScreen)
+            if option == 'Help and Support':
+                button.clicked.connect(self.gotoHelpAndSupportScreen)
             else:
                 button.clicked.connect(self.onButtonClick)
             layout.addWidget(button)
@@ -47,6 +66,54 @@ class SettingsScreen(QWidget):
             self.stacked_widget.setCurrentIndex(index)
         else:
             print("User Management Screen not found in QStackedWidget")
+
+    def gotoNotificationsScreen(self):
+        # Switch to the Notifications Screen
+        index = self.stacked_widget.indexOf(self.main_app.notifications_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Notifications Screen not found in QStackedWidget")
+    
+    def gotoPaymentInformationScreen(self):
+        # Switch to the Payment Information Screen
+        index = self.stacked_widget.indexOf(self.main_app.payment_information_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Payment Information Screen not found in QStackedWidget")
+    
+    def gotoParkingPreferencesScreen(self):
+        # Switch to the Parking Preferences Screen
+        index = self.stacked_widget.indexOf(self.main_app.parking_preferences_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Parking Preferences Screen not found in QStackedWidget")
+    
+    def gotoMapSettingsScreen(self):
+        # Switch to the Map Settings Screen
+        index = self.stacked_widget.indexOf(self.main_app.map_settings_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Map Settings Screen not found in QStackedWidget")
+    
+    def gotoPrivacySettingsScreen(self):
+        # Switch to the Privacy Settings Screen
+        index = self.stacked_widget.indexOf(self.main_app.privacy_settings_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Privacy Settings Screen not found in QStackedWidget")
+
+    def gotoHelpAndSupportScreen(self):
+        # Switch to the Help and Support Screen
+        index = self.stacked_widget.indexOf(self.main_app.help_and_support_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("Help and Support Screen not found in QStackedWidget")
 
     # Additional methods to handle navigation to other screens as needed
     # Example:
