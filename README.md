@@ -16,9 +16,10 @@ FindMySpot-G9 is a comprehensive parking solution application designed to simpli
 ## Installation
 To run FindMySpot-G9, follow these steps:
 1. Ensure Python and PyQt5 are installed on your system.
-2. Clone the repository: `git clone https://github.com/YourUsername/FindMySpot-G9.git`
-3. Navigate to the project directory: `cd FindMySpot-G9`
-4. Run the application: `python main.py`
+2. pip install PyQt5 pymongo bcrypt
+3. Clone the repository: `git clone https://github.com/YourUsername/FindMySpot-G9.git`
+4. Navigate to the project directory: `cd FindMySpot-G9`
+5. Run the application: `python main.py`
 
 ## Usage
 After launching FindMySpot-G9, log in with your user credentials. Navigate through the app using the interactive UI to access different features such as viewing available parking spots, managing your account, and setting your parking preferences.
