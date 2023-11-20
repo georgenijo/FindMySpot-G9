@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
+from user_management_screen import UserManagementScreen
 
 class SettingsScreen(QWidget):
-    def __init__(self, stacked_widget, dashboard_index=1):
+    def __init__(self, stacked_widget, main_app):
         super().__init__()
         self.stacked_widget = stacked_widget
-        self.dashboard_index = dashboard_index
+        self.main_app = main_app  # reference to MainApp to access other screens
         self.initUI()
 
     def initUI(self):
-        # Create a QVBoxLayout for the main layout
         layout = QVBoxLayout()
 
         # Add buttons for settings options
@@ -24,13 +24,11 @@ class SettingsScreen(QWidget):
 
         for option, button_text in settings_buttons:
             button = QPushButton(f'{option} - {button_text}', self)
-            button.clicked.connect(self.onButtonClick)
+            if option == 'User Management':
+                button.clicked.connect(self.gotoUserManagementScreen)
+            else:
+                button.clicked.connect(self.onButtonClick)
             layout.addWidget(button)
-
-        # Add a back button
-        back_button = QPushButton('Back to Dashboard', self)
-        back_button.clicked.connect(self.gotoDashboard)
-        layout.addWidget(back_button)
 
         # Set the main layout for the widget
         self.setLayout(layout)
@@ -42,6 +40,15 @@ class SettingsScreen(QWidget):
             button_text = sender.text()
             print(f'Clicked: {button_text}')
 
-    def gotoDashboard(self):
-        # Change the current widget of the stacked_widget to Dashboard
-        self.stacked_widget.setCurrentIndex(self.dashboard_index)
+    def gotoUserManagementScreen(self):
+        # Switch to the User Management Screen
+        index = self.stacked_widget.indexOf(self.main_app.user_management_screen)
+        if index != -1:
+            self.stacked_widget.setCurrentIndex(index)
+        else:
+            print("User Management Screen not found in QStackedWidget")
+
+    # Additional methods to handle navigation to other screens as needed
+    # Example:
+    # def gotoNotificationsScreen(self):
+    #     # Logic to navigate to the Notifications screen
