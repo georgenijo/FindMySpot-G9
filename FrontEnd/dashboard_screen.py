@@ -25,7 +25,7 @@ class DashboardScreen(QWidget):
 
         # QWebEngineView for Google Maps
         self.map_view = QWebEngineView()
-        self.map_view.load(QUrl.fromLocalFile(r"C:\Users\georg\Documents\GitHub\FindMySpot-G9\maps.html"))
+        self.map_view.load(QUrl.fromLocalFile(r"C:\Users\georg\Documents\GitHub\FindMySpot-G9\FrontEnd\maps.html"))
         layout.addWidget(self.map_view)
 
         self.setLayout(layout)
