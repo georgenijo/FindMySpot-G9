@@ -31,9 +31,7 @@ class MainApp(QApplication):
         self.map_settings_screen = MapSettingsScreen(self.stacked_widget)
         self.privacy_settings_screen = PrivacySettingsScreen(self.stacked_widget)
         self.help_and_support_screen = HelpScreen(self.stacked_widget)
-
-
-             
+    
 
         self.stacked_widget.addWidget(self.login_screen)
         self.stacked_widget.addWidget(self.dashboard_screen)
