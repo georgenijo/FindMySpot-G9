@@ -11,8 +11,7 @@ from parking_preferences_screen import ParkingPreferencesScreen  # Import Parkin
 from map_settings_screen import MapSettingsScreen  # Import MapSettingsScreen
 from privacy_settings_screen import PrivacySettingsScreen  # Import PrivacySettingsScreen
 from help_support_screen import HelpScreen  # Import HelpAndSupportScreen
-
-
+from map_services import MapsService
 
 class MainApp(QApplication):
     def __init__(self, args):
@@ -48,6 +47,10 @@ class MainApp(QApplication):
 
         self.loadStylesheet("style.qss")
         self.stacked_widget.show()
+
+    def setup_services(self):
+        # Replace 'Your-API-Key' with your actual Google Maps API key
+        self.maps_service = MapsService('Your-API-Key')
 
     def loadStylesheet(self, filename):
         with open(filename, "r") as file:
