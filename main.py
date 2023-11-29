@@ -28,7 +28,7 @@ class MainApp(QApplication):
         self.stacked_widget = QStackedWidget()
         self.widget_indices = {}
 
-        print("Initializing for commit..")
+        print("Testing Commit.")
 
         self.db = Database()
 
