@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QWidget):
         # UI setup
         # Modify these lines in the __init__ method of the MainWindow class
 
-        self.setGeometry(100, 100, 1000, 600)  # Double the width and height for UI panel
+        self.setGeometry(100, 100, 2000, 1200)  # Double the width and height
 
         self.setWindowTitle('FindMySpot')
 
@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QWidget):
 
         # Image label for displaying the video
         self.image_label = QtWidgets.QLabel(self)
-        self.image_label.resize(640, 480)      # Double the size of the image label
+        self.image_label.resize(1280, 960)      # Double the size of the image label
         self.layout.addWidget(self.image_label)
 
         # Reservation Input
@@ -127,7 +127,7 @@ class MainWindow(QtWidgets.QWidget):
         imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
 
         # Resize the original frame for display
-        scale_factor = scale_percent / 100   # Double the size
+        scale_factor = scale_percent / 100 * 2  # Double the size
         width_resized = int(frame.shape[1] * scale_factor)
         height_resized = int(frame.shape[0] * scale_factor)
         frame_resized = cv2.resize(frame, (width_resized, height_resized), interpolation=cv2.INTER_AREA)
