@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 import pickle
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QPushButton, QStackedWidget
+from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel
 
 # Initialize the parking space positions
 try:
@@ -28,6 +28,8 @@ class MainWindow(QtWidgets.QWidget):
         super().__init__()
 
         self.db = db
+        self.main_app = main_app
+        
         # Video feed
         self.cap = cv2.VideoCapture('Park.mp4')
         # Playback flag
@@ -39,25 +41,34 @@ class MainWindow(QtWidgets.QWidget):
 
         self.reserved_spots = []
 
-        self.setGeometry(100, 100, 2000, 1200)  # Double the width and height
-
+        self.setGeometry(100, 100, 2000, 1200)
         self.setWindowTitle('FindMySpot')
 
-        self.main_app = main_app
-        self.stacked_widget = QStackedWidget(self)
-
-        # Layouts
-        self.layout = QtWidgets.QHBoxLayout()
-        self.right_layout = QtWidgets.QVBoxLayout()
-
-        self.back_to_dashboard_button = QPushButton('Back to Dashboard', self)
-        self.back_to_dashboard_button.clicked.connect(self.gotoDashboard)
-        self.layout.addWidget(self.back_to_dashboard_button)
+        # Main horizontal layout
+        self.main_layout = QtWidgets.QHBoxLayout(self)
+        self.setLayout(self.main_layout)
 
         # Image label for displaying the video
         self.image_label = QtWidgets.QLabel(self)
-        self.image_label.resize(1280, 960)      # Double the size of the image label
-        self.layout.addWidget(self.image_label)
+        self.image_label.resize(1280, 960)
+
+        # Overlay widget for the 'Back' button
+        self.overlay_widget = QtWidgets.QWidget(self.image_label)
+        self.overlay_widget.setGeometry(0, 0, 200, 100)  # Adjust size and position as needed
+
+        # Layout for the overlay widget
+        overlay_layout = QtWidgets.QVBoxLayout(self.overlay_widget)
+
+        # Back button on top of the video
+        self.back_to_dashboard_button = QtWidgets.QPushButton('Back', self.overlay_widget)
+        self.back_to_dashboard_button.clicked.connect(self.gotoDashboard)
+        overlay_layout.addWidget(self.back_to_dashboard_button, 0, Qt.AlignTop | Qt.AlignLeft)
+
+        # Set the video label and overlay widget to the main layout
+        self.main_layout.addWidget(self.image_label)
+        
+        # Right layout for controls
+        self.right_layout = QtWidgets.QVBoxLayout()
 
         # Reservation Input
         self.space_input = QtWidgets.QLineEdit(self)
@@ -84,10 +95,7 @@ class MainWindow(QtWidgets.QWidget):
         self.right_layout.addWidget(self.notification_panel)
 
         # Add right layout to main layout
-        self.layout.addLayout(self.right_layout)
-
-        # Set the layout to the window
-        self.setLayout(self.layout)
+        self.main_layout.addLayout(self.right_layout)
 
         # Timer for video updates
         self.timer = QTimer(self)

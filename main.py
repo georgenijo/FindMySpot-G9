@@ -63,8 +63,6 @@ class MainApp(QApplication):
         self.help_and_support_screen = HelpScreen(self.stacked_widget)
         self.widget_indices['help_and_support_screen'] = self.stacked_widget.addWidget(self.help_and_support_screen)
 
-
-        
         self.main_window = MainWindow(self.db, self) # 'self' refers to the instance of MainApp
         self.widget_indices['main_window'] = self.stacked_widget.addWidget(self.main_window)
 
