@@ -5,6 +5,7 @@ import pickle
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import QPushButton, QStackedWidget
 
 # Initialize the parking space positions
 try:
@@ -23,7 +24,7 @@ app = QtWidgets.QApplication(sys.argv)
 
 # Main window class
 class MainWindow(QtWidgets.QWidget):
-    def __init__(self, db):
+    def __init__(self, db, main_app):
         super().__init__()
 
         self.db = db
@@ -42,9 +43,16 @@ class MainWindow(QtWidgets.QWidget):
 
         self.setWindowTitle('FindMySpot')
 
+        self.main_app = main_app
+        self.stacked_widget = QStackedWidget(self)
+
         # Layouts
         self.layout = QtWidgets.QHBoxLayout()
         self.right_layout = QtWidgets.QVBoxLayout()
+
+        self.back_to_dashboard_button = QPushButton('Back to Dashboard', self)
+        self.back_to_dashboard_button.clicked.connect(self.gotoDashboard)
+        self.layout.addWidget(self.back_to_dashboard_button)
 
         # Image label for displaying the video
         self.image_label = QtWidgets.QLabel(self)
@@ -94,6 +102,19 @@ class MainWindow(QtWidgets.QWidget):
         # Update info panel
         self.update_info_panel()
         
+    def gotoDashboard(self):
+        # Switch to the Dashboard Screen
+        dashboard_index = self.main_app.widget_indices.get('dashboard_screen')
+        if dashboard_index is not None:
+            self.main_app.stacked_widget.setCurrentIndex(dashboard_index)
+        else:
+            print("Dashboard Screen not found in QStackedWidget")
+
+    def go_back(self):
+        # Hide the current window
+        self.hide()
+        # Show the dashboard window
+        self.dashboard_window.show()
 
     def on_user_login(self):
         # Call this method when the user logs in
