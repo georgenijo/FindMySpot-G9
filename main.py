@@ -31,7 +31,7 @@ class MainApp(QApplication):
         print("Testing Commit.")
 
         self.db = Database()
-
+        
         # Initialize and add your screens
         self.login_screen = LoginScreen(self.stacked_widget, self.db)
         self.widget_indices['login_screen'] = self.stacked_widget.addWidget(self.login_screen)
@@ -63,7 +63,7 @@ class MainApp(QApplication):
         self.help_and_support_screen = HelpScreen(self.stacked_widget)
         self.widget_indices['help_and_support_screen'] = self.stacked_widget.addWidget(self.help_and_support_screen)
 
-        self.main_window = MainWindow()
+        self.main_window = MainWindow(self.db)
         self.widget_indices['main_window'] = self.stacked_widget.addWidget(self.main_window)
 
         self.loadStylesheet("style.qss")
