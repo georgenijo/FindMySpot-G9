@@ -36,7 +36,7 @@ class MainWindow(QtWidgets.QWidget):
         self.is_paused = False
 
         self.frame_counter = 0
-        self.process_every_n_frames = 16  # Adjust as needed
+        self.process_every_n_frames = 4  # Adjust as needed
 
         self.current_user = None
         # UI setup

@@ -9,7 +9,7 @@ QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from settings_screen import SettingsScreen
-from ui import MainWindow
+from camera import MainWindow
 from db_module import Database
 from login_screen import LoginScreen
 from dashboard_screen import DashboardScreen
