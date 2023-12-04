@@ -18,13 +18,18 @@ is_paused = False  # Start with playback not paused
 def checkParkingSpace(imgPro, imgDisplay):
     spaceCounter = 0
 
-    for pos in posList:
+    for index,pos in enumerate(posList):
         x, y = pos
 
         imgCrop = imgPro[y:y + original_height, x:x + original_width]
         count = cv2.countNonZero(imgCrop)
+        # Adjust this threshold based on your specific needs
+        if index in [30, 32, 42, 43]:
+            threshold = 1500
+        else:
+            threshold = 1200
 
-        if count < 1400:
+        if count < threshold:
             color = (0, 255, 0)
             thickness = 5
             spaceCounter += 1

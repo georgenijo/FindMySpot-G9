@@ -35,6 +35,9 @@ class MainWindow(QtWidgets.QWidget):
         # Playback flag
         self.is_paused = False
 
+        self.frame_counter = 0
+        self.process_every_n_frames = 16  # Adjust as needed
+
         self.current_user = None
         # UI setup
         # Modify these lines in the __init__ method of the MainWindow class
@@ -90,9 +93,15 @@ class MainWindow(QtWidgets.QWidget):
         self.right_layout.addWidget(self.info_panel)
 
         # Notification panel
-        self.notification_panel = QtWidgets.QTextBrowser(self)  # or QLabel if you prefer
-        self.notification_panel.setFixedHeight(50)  # Adjust the height as needed
+        self.notification_panel = QtWidgets.QTextBrowser(self)
+        self.notification_panel.setFixedHeight(100)  # Adjust the height as needed
+
+        # Set specific style for notification panel
+        notification_panel_style = "font-size: 10pt;"  # Smaller font size
+        self.notification_panel.setStyleSheet(notification_panel_style)
+
         self.right_layout.addWidget(self.notification_panel)
+
 
         # Add right layout to main layout
         self.main_layout.addLayout(self.right_layout)
@@ -100,7 +109,7 @@ class MainWindow(QtWidgets.QWidget):
         # Timer for video updates
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
-        self.timer.start(30)  # Update every ~30 ms
+        self.timer.start(60)  # Update every ~30 ms
 
         # Pause Button
         self.pause_button = QtWidgets.QPushButton("Pause", self)
@@ -140,16 +149,16 @@ class MainWindow(QtWidgets.QWidget):
         self.is_paused = not self.is_paused
         self.pause_button.setText("Resume" if self.is_paused else "Pause")
 
+
     def update_frame(self):
         if not self.is_paused:
             ret, frame = self.cap.read()
             if ret:
-                # Process the frame
-                frame = self.process_frame(frame)
-
-                # Convert frame to QPixmap and display it
-                frame_qt = self.convert_cv_qt(frame)
-                self.image_label.setPixmap(frame_qt)
+                self.frame_counter += 1
+                if self.frame_counter % self.process_every_n_frames == 0:
+                    frame = self.process_frame(frame)
+                    frame_qt = self.convert_cv_qt(frame)
+                    self.image_label.setPixmap(frame_qt)
 
     def process_frame(self, frame):
         # Apply image processing to the original frame
@@ -178,9 +187,13 @@ class MainWindow(QtWidgets.QWidget):
             imgCrop = imgDilate[pos[1]:pos[1] + original_height, pos[0]:pos[0] + original_width]
             count = cv2.countNonZero(imgCrop)
 
-            # Adjust this threshold based on your specific needs
-            threshold = 1400  # Example threshold, adjust this value based on your testing
 
+            # Adjust this threshold based on your specific needs
+            if index in [30, 32, 42, 43]:
+                threshold = 1500
+            else:
+                threshold = 1200
+            
             if count < threshold:
                 if index in self.reserved_spots:
                     color = (0, 255, 255)  # Yellow for reserved spaces
