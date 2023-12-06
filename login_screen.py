@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from googlemaps import Client
 
 class LoginScreen(QWidget):
-    def __init__(self, stacked_widget, db, widget_indices, main_app):
+    def __init__(self, stacked_widget, db, widget_indices):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
@@ -47,6 +48,9 @@ class LoginScreen(QWidget):
             self.login_status_label.setText('')
             main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
             main_window.set_current_user(username)  # Set the current user in MainWindow
+            dashboard_screen = self.stacked_widget.widget(1)
+            dashboard_screen.set_current_user(username)
+            dashboard_screen.update_dashboard()
             self.stacked_widget.setCurrentIndex(1)
             self.clearInputs()
             
