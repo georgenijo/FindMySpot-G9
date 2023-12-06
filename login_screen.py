@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
-from googlemaps import Client
+from twilio.rest import Client
 
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db, widget_indices):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
+        self.widget_indices = widget_indices
         self.initUI()
 
 
