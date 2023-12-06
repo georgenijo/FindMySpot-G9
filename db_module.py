@@ -50,3 +50,8 @@ class Database:
             self.parking_spots.update_one({"spotId": spot_id}, {"$set": {"isReserved": False, "reservedBy": None, "reservationTime": None}})
             return True  # Unreservation successful
         return False  # Spot not reserved by this user or doesn't exist
+    def add_user(self, username, password, phone):
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        self.users.insert_one({"username": username, "password": hashed_password, "phone": phone})
+        return True  # Indicate successful addition
+
