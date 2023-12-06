@@ -1,10 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 
+
 class LoginScreen(QWidget):
-    def __init__(self, stacked_widget, db):
+    def __init__(self, stacked_widget, db, main_app):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
+        self.main_app = main_app
         self.initUI()
 
     def initUI(self):
@@ -41,6 +43,10 @@ class LoginScreen(QWidget):
             self.login_status_label.setText('')
             main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
             main_window.set_current_user(username)  # Set the current user in MainWindow
+            self.main_app.set_current_user(username)
+            dashboard_screen = self.stacked_widget.widget(1)
+            dashboard_screen.set_current_user(username)
+            dashboard_screen.update_dashboard()
             self.stacked_widget.setCurrentIndex(1)
             self.clearInputs()
             

@@ -31,12 +31,14 @@ class MainApp(QApplication):
         print("Testing Commit.")
 
         self.db = Database()
+        self.current_user = None
+
 
         # Initialize and add your screens
-        self.login_screen = LoginScreen(self.stacked_widget, self.db)
+        self.login_screen = LoginScreen(self.stacked_widget, self.db, self)
         self.widget_indices['login_screen'] = self.stacked_widget.addWidget(self.login_screen)
 
-        self.dashboard_screen = DashboardScreen(self.stacked_widget, self.widget_indices)
+        self.dashboard_screen = DashboardScreen(self.stacked_widget, self.widget_indices, self.db, self.current_user)
         self.widget_indices['dashboard_screen'] = self.stacked_widget.addWidget(self.dashboard_screen)
 
         self.settings_screen = SettingsScreen(self.stacked_widget, self)
@@ -68,6 +70,9 @@ class MainApp(QApplication):
 
         self.loadStylesheet("style.qss")
         self.stacked_widget.show()
+
+    def set_current_user(self, username):
+        self.current_user = username
 
     def loadStylesheet(self, filename):
         with open(filename, "r") as file:

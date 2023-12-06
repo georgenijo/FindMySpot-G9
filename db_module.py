@@ -28,6 +28,11 @@ class Database:
     def get_all_reserved_spots(self):
         reserved_spots = self.parking_spots.find({"isReserved": True}, {"spotId": 1, "_id": 0})
         return [spot['spotId'] for spot in reserved_spots]
+    
+    def get_user_reservations(self, username):
+        user_reservations = self.parking_spots.find({"reservedBy": username}, {"spotId": 1, "_id": 0})
+        return [int(reservation['spotId']) for reservation in user_reservations]
+
 
     def reserve_parking_spot(self, username, spot_id):
         # Convert spot_id to integer

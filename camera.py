@@ -230,6 +230,7 @@ class MainWindow(QtWidgets.QWidget):
             space_number = int(self.space_input.text())
             if 0 <= space_number < len(posList):
                 username = self.current_user # You'll need to get the username from the user session
+                print(self.current_user)
                 success = self.db.reserve_parking_spot(username, space_number)
                 if success:
                     reserved_spaces.add(posList[space_number])
