@@ -45,21 +45,44 @@ class LoginScreen(QWidget):
     def login(self):
         username = self.username_input.text()
         password = self.password_input.text()
+
         if self.db.validate_login(username, password):
-            self.login_status_label.setText('')
-            # Correct the index according to where MainWindow is added to stacked_widget
-            main_window_index = self.widget_indices['main_window']  # Use the stored index
-            main_window = self.stacked_widget.widget(main_window_index)
-            # Ensure that main_window is an instance of MainWindow
-            if hasattr(main_window, 'set_current_user'):
-                main_window.set_current_user(username)
-                self.stacked_widget.setCurrentIndex(main_window_index)
+            self.login_status_label.setText('Login successful!')
+            
+            # Get the index of the dashboard screen from the widget_indices dictionary
+            dashboard_index = self.widget_indices.get('dashboard_screen')
+            
+            # Check if the index exists, to avoid errors
+            if dashboard_index is not None:
+                # Set the dashboard screen as the current widget in the stacked_widget
+                self.stacked_widget.setCurrentIndex(dashboard_index)
                 self.clearInputs()
             else:
-                print("Error: The referenced widget does not have a 'set_current_user' method.")
-                # Handle the error appropriately
+                print("Error: Dashboard screen index not found.")
+            
         else:
             self.login_status_label.setText('Invalid username or password')
+    def login(self):
+        username = self.username_input.text()
+        password = self.password_input.text()
+
+        if self.db.validate_login(username, password):
+            self.login_status_label.setText('Login successful!')
+
+            # Get the index of the dashboard screen from the widget_indices dictionary
+            dashboard_index = self.widget_indices.get('dashboard_screen')
+
+            # Check if the index exists, to avoid errors
+            if dashboard_index is not None:
+                # Set the dashboard screen as the current widget in the stacked_widget
+                self.stacked_widget.setCurrentIndex(dashboard_index)
+                self.clearInputs()
+            else:
+                print("Error: Dashboard screen index not found.")
+
+        else:
+            self.login_status_label.setText('Invalid username or password')
+
 
     def register(self):
         username = self.username_input.text()

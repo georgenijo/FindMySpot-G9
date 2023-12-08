@@ -36,8 +36,7 @@ class MainApp(QApplication):
         
         self.login_screen = LoginScreen(self.stacked_widget, self.db, self.widget_indices)
         self.widget_indices['login_screen'] = self.stacked_widget.addWidget(self.login_screen)
-
-
+        
         self.dashboard_screen = DashboardScreen(self.stacked_widget, self.widget_indices)
         self.widget_indices['dashboard_screen'] = self.stacked_widget.addWidget(self.dashboard_screen)
 
