@@ -24,11 +24,12 @@ app = QtWidgets.QApplication(sys.argv)
 
 # Main window class
 class MainWindow(QtWidgets.QWidget):
-    def __init__(self, db, main_app):
+    def __init__(self, stacked_widget, db, main_app):
         super().__init__()
 
         self.db = db
         self.main_app = main_app
+        self.stacked_widget = stacked_widget
         
         # Video feed
         self.cap = cv2.VideoCapture('Park.mp4')
@@ -230,10 +231,13 @@ class MainWindow(QtWidgets.QWidget):
             space_number = int(self.space_input.text())
             if 0 <= space_number < len(posList):
                 username = self.current_user # You'll need to get the username from the user session
+                print(self.current_user)
+                dashboard_screen = self.stacked_widget.widget(1)
                 success = self.db.reserve_parking_spot(username, space_number)
                 if success:
                     reserved_spaces.add(posList[space_number])
                     self.display_notification("Space reserved successfully.")
+                    dashboard_screen.update_dashboard()
                     self.space_input.clear()
                 else:
                     self.display_notification("Space already reserved!")
@@ -245,12 +249,13 @@ class MainWindow(QtWidgets.QWidget):
             space_number = int(self.space_input.text())
             if 0 <= space_number < len(posList):
                 reserved_space = posList[space_number]
+                dashboard_screen = self.stacked_widget.widget(1)
                 success = self.db.unreserve_parking_spot(self.current_user, space_number)
-
                 if success:
                     # Only attempt to remove if the space is in the set
                     if reserved_space in reserved_spaces:
                         reserved_spaces.remove(reserved_space)
+                    dashboard_screen.update_dashboard()
                     self.update_info_panel()
                     self.space_input.clear()
                     self.display_notification("Space unreserved successfully.")

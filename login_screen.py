@@ -6,7 +6,7 @@ class LoginScreen(QWidget):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
-        self.widget_indices = widget_indices  # Store widget indices
+        self.widget_indices = widget_indices
         self.initUI()
 
 
@@ -59,9 +59,38 @@ class LoginScreen(QWidget):
                 self.clearInputs()
             else:
                 print("Error: Dashboard screen index not found.")
-            
-        else:
-            self.login_status_label.setText('Invalid username or password')
+                
+            self.login_status_label.setText('')
+            main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
+            main_window.set_current_user(username)  # Set the current user in MainWindow
+            dashboard_screen = self.stacked_widget.widget(1)
+            dashboard_screen.set_current_user(username)
+            dashboard_screen.update_dashboard()
+            if self.db.validate_login(username, password):
+                self.login_status_label.setText('')
+                self.stacked_widget.setCurrentIndex(1)
+                self.clearInputs()
+            else:
+                self.login_status_label.setText('Invalid username or password')
+            def login(self):
+                username = self.username_input.text()
+                password = self.password_input.text()
+
+                if self.db.validate_login(username, password):
+                    self.login_status_label.setText('Login successful!')
+
+                    # Get the index of the dashboard screen from the widget_indices dictionary
+                    dashboard_index = self.widget_indices.get('dashboard_screen')
+
+                    # Check if the index exists, to avoid errors
+                    if dashboard_index is not None:
+                        # Set the dashboard screen as the current widget in the stacked_widget
+                        self.stacked_widget.setCurrentIndex(dashboard_index)
+                        self.clearInputs()
+                    else:
+                        print("Error: Dashboard screen index not found.")
+else:
+    self.login_status_label.setText('Invalid username or password')
     def login(self):
         username = self.username_input.text()
         password = self.password_input.text()
