@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
-from twilio.rest import Client
+from googlemaps import Client
 
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db, widget_indices):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
+<<<<<<< HEAD
         self.widget_indices = widget_indices  # Store widget indices
+=======
+>>>>>>> parent of 4d12ca1 (Fixed login and database)
         self.initUI()
 
 

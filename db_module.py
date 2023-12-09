@@ -9,10 +9,9 @@ class Database:
         self.users = self.db['users']
         self.parking_spots = self.db['parking_spots']  # New collection for parking spots
 
-    def add_user(self, username, password, phone):
+    def add_user(self, username, password):
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        self.users.insert_one({"username": username, "password": hashed_password, "phone": phone})
-        return True  # Indicate successful addition
+        self.users.insert_one({"username": username, "password": hashed_password})
 
     def get_user(self, username):
         return self.users.find_one({"username": username})

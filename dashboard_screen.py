@@ -18,14 +18,11 @@ class DashboardScreen(QWidget):
         self.dashboard_label = QLabel('Dashboard - Main app functionality', self)
         self.settings_button = QPushButton('Settings', self)
         self.logout_button = QPushButton('Logout', self)
-
         self.ui_button = QPushButton('Go to UI', self)
         self.ui_button.clicked.connect(self.gotoUI)
         layout.addWidget(self.ui_button)
-
         self.settings_button.clicked.connect(self.gotoSettings)
         self.logout_button.clicked.connect(self.logout)
-
         layout.addWidget(self.dashboard_label)
         layout.addWidget(self.settings_button)
         layout.addWidget(self.logout_button)
@@ -38,12 +35,23 @@ class DashboardScreen(QWidget):
         self.setLayout(layout)
         self.setWindowTitle('Dashboard')
 
+    def update_dashboard(self):
+        # Placeholder for the actual update logic
+        self.reserved_spots = self.db.get_all_reserved_spots()
+        # Implement the logic to visually update parking spots based on their reserved status
+        # Example (pseudocode):
+        for spot_widget in self.parking_spot_widgets:
+             if spot_widget.id in self.reserved_spots:
+                 spot_widget.set_reserved_style()
+             else:
+                 spot_widget.set_available_style()
+
     def gotoSettings(self):
         self.stacked_widget.setCurrentIndex(2)
 
     def logout(self):
         self.stacked_widget.setCurrentIndex(0)
-    
+
     def gotoUI(self):
         # Navigate to the MainWindow (UI)
         main_window_index = self.widget_indices.get('main_window')
@@ -51,3 +59,6 @@ class DashboardScreen(QWidget):
             self.stacked_widget.setCurrentIndex(main_window_index)
 
     # Add any additional methods needed for your dashboard functionality
+
+# Additional methods and logic would go here
+

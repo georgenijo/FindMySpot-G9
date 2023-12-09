@@ -230,19 +230,24 @@ class MainWindow(QtWidgets.QWidget):
         try:
             space_number = int(self.space_input.text())
             if 0 <= space_number < len(posList):
-                username = self.current_user # You'll need to get the username from the user session
-                print(self.current_user)
-                dashboard_screen = self.stacked_widget.widget(1)
+                username = self.current_user  # Get the username from the user session
+                print(username)
+                # Use the widget_indices dictionary to get the dashboard screen
+                dashboard_index = self.main_app.widget_indices.get('dashboard_screen')
+                dashboard_screen = self.stacked_widget.widget(dashboard_index)
+
                 success = self.db.reserve_parking_spot(username, space_number)
                 if success:
                     reserved_spaces.add(posList[space_number])
                     self.display_notification("Space reserved successfully.")
-                    dashboard_screen.update_dashboard()
+                    if hasattr(dashboard_screen, 'update_dashboard'):
+                        dashboard_screen.update_dashboard()
                     self.space_input.clear()
                 else:
                     self.display_notification("Space already reserved!")
         except ValueError:
-            pass
+            self.display_notification("Invalid input for space number.")
+
 
     def unreserve_space(self):
         try:

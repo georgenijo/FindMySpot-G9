@@ -28,8 +28,6 @@ class MainApp(QApplication):
         self.stacked_widget = QStackedWidget()
         self.widget_indices = {}
 
-        print("Testing Commit.")
-
         self.db = Database()
         self.current_user = None
 
