@@ -18,44 +18,37 @@ class LoginScreen(QWidget):
 
 
     def initUI(self):
-        layout = QVBoxLayout()
-
-        # Create and add the username label and input field
         self.username_label = QLabel('Username', self)
         self.username_input = QLineEdit(self)
-        layout.addWidget(self.username_label)
-        layout.addWidget(self.username_input)
-
-        # Create and add the password label and input field
         self.password_label = QLabel('Password', self)
         self.password_input = QLineEdit(self)
         self.password_input.setEchoMode(QLineEdit.Password)
-        layout.addWidget(self.password_label)
-        layout.addWidget(self.password_input)
-
-        # Create and add the phone number label and input field
         self.phone_number_label = QLabel('Phone Number', self)
         self.phone_number_input = QLineEdit(self)
+
+
+        self.login_button = QPushButton('Login', self)
+        self.register_button = QPushButton('Register', self)
+
+        self.login_status_label = QLabel('', self)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.username_label)
+        layout.addWidget(self.username_input)
+        layout.addWidget(self.password_label)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.login_button)
+        layout.addWidget(self.register_button)
+        layout.addWidget(self.login_status_label)
         layout.addWidget(self.phone_number_label)
         layout.addWidget(self.phone_number_input)
 
-        # Create and add the login and register buttons
-        self.login_button = QPushButton('Login', self)
-        self.register_button = QPushButton('Register', self)
-        layout.addWidget(self.login_button)
-        layout.addWidget(self.register_button)
-
-        # Create and add the status label
-        self.login_status_label = QLabel('', self)
-        layout.addWidget(self.login_status_label)
-
-        # Set the layout on the widget
         self.setLayout(layout)
         self.setWindowTitle('FindMySpot - Login')
 
-        # Connect the buttons to their functions
         self.login_button.clicked.connect(self.login)
         self.register_button.clicked.connect(self.register)
+
     def login(self):
         username = self.username_input.text()
         password = self.password_input.text()
@@ -82,6 +75,7 @@ class LoginScreen(QWidget):
 
         if self.db.validate_login(username, password):
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.login_status_label.setText('Login successful!')
 
 =======
@@ -93,6 +87,10 @@ class LoginScreen(QWidget):
             self.login_status_label.setStyleSheet(self.login_status_label.styleSheet())
 
 >>>>>>> parent of 2fac40a (Revert "Fixed map and login data")
+=======
+            self.login_status_label.setText('Login successful!')
+
+>>>>>>> parent of 38b37cf (Re-arranging the phone number box to be grouped)
             # Get the index of the dashboard screen from the widget_indices dictionary
             dashboard_index = self.widget_indices.get('dashboard_screen')
 
@@ -105,12 +103,8 @@ class LoginScreen(QWidget):
                 print("Error: Dashboard screen index not found.")
 
         else:
-            # Set object name for styling error messages
-            self.login_status_label.setObjectName("errorLabel")
             self.login_status_label.setText('Invalid username or password')
-            
-            # Refresh the style of the label to apply new objectName
-            self.login_status_label.setStyleSheet(self.login_status_label.styleSheet())
+
 
 
     def register(self):
