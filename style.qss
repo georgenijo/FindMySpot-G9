@@ -1,55 +1,28 @@
 QWidget {
     font-family: 'Segoe UI';
-    font-size: 14pt; /* Increased font size for better readability */
-    background-color: #333333; /* Dark background for contrast */
-    color: #FFFFFF; /* Light text for readability on dark background */
+    font-size: 12pt;
 }
 
 QPushButton {
-    border: none;
-    border-radius: 10px; /* Rounded corners for a modern look */
-    padding: 10px 20px; /* Larger padding for a touch-friendly design */
+    border: 2px solid #5CACEE;
+    border-radius: 5px;
+    padding: 5px 15px;
     background-color: #5CACEE;
     color: white;
-    font-weight: bold; /* Make text bold to stand out */
 }
 
 QPushButton:hover {
     background-color: #1E90FF;
 }
 
-QPushButton:disabled {
-    background-color: #A9A9A9;
-    color: #333333;
-}
-
 QLineEdit {
     border: 2px solid #A9A9A9;
-    border-radius: 10px; /* Match button border-radius */
-    padding: 10px; /* Uniform padding */
-    background-color: #555555; /* Slightly lighter than QWidget background for contrast */
-    color: #D6D6D6; /* Lighter text color for visibility */
-}
-
-QLineEdit:focus {
-    border-color: #1E90FF; /* Highlight when focused */
+    border-radius: 4px;
+    padding: 5px;
 }
 
 QLabel {
-    color: #D6D6D6; /* Lighter color for visibility */
-    font-size: 16pt; /* Larger font size for labels */
+    color: #333333;
 }
 
-/* Error message styling */
-QLabel#errorLabel {
-    color: #FF6347; /* A common color for error messages */
-    font-size: 12pt; /* Smaller than other labels for subtlety */
-}
-
-/* Success message styling */
-QLabel#successLabel {
-    color: #32CD32; /* A common color for success messages */
-    font-size: 12pt; /* Smaller than other labels for subtlety */
-}
-
-/* Add styles for other widgets as needed */
+/* Add more styles for other widgets */
