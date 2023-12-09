@@ -18,6 +18,7 @@ class PaymentInformationScreen(QWidget):
 
         # Cardholder name
         self.cardholder_name_input = QLineEdit(self)
+        self.cardholder_name_input.setPlaceholderText("Cardholder Name")
         form_layout.addRow("Cardholder Name:", self.cardholder_name_input)
 
         # Card Number
