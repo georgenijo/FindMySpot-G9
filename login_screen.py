@@ -1,107 +1,69 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
-from googlemaps import Client
+from twilio.rest import Client
 
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db, widget_indices):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.db = db
-<<<<<<< HEAD
-        self.widget_indices = widget_indices  # Store widget indices
-=======
->>>>>>> parent of 4d12ca1 (Fixed login and database)
+        self.widget_indices = widget_indices
         self.initUI()
 
 
     def initUI(self):
-        layout = QVBoxLayout()
-
-        # Create and add the username label and input field
         self.username_label = QLabel('Username', self)
         self.username_input = QLineEdit(self)
-        layout.addWidget(self.username_label)
-        layout.addWidget(self.username_input)
-
-        # Create and add the password label and input field
         self.password_label = QLabel('Password', self)
         self.password_input = QLineEdit(self)
         self.password_input.setEchoMode(QLineEdit.Password)
-        layout.addWidget(self.password_label)
-        layout.addWidget(self.password_input)
-
-        # Create and add the phone number label and input field
         self.phone_number_label = QLabel('Phone Number', self)
         self.phone_number_input = QLineEdit(self)
+
+
+        self.login_button = QPushButton('Login', self)
+        self.register_button = QPushButton('Register', self)
+
+        self.login_status_label = QLabel('', self)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.username_label)
+        layout.addWidget(self.username_input)
+        layout.addWidget(self.password_label)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.login_button)
+        layout.addWidget(self.register_button)
+        layout.addWidget(self.login_status_label)
         layout.addWidget(self.phone_number_label)
         layout.addWidget(self.phone_number_input)
 
-        # Create and add the login and register buttons
-        self.login_button = QPushButton('Login', self)
-        self.register_button = QPushButton('Register', self)
-        layout.addWidget(self.login_button)
-        layout.addWidget(self.register_button)
-
-        # Create and add the status label
-        self.login_status_label = QLabel('', self)
-        layout.addWidget(self.login_status_label)
-
-        # Set the layout on the widget
         self.setLayout(layout)
         self.setWindowTitle('FindMySpot - Login')
 
-        # Connect the buttons to their functions
         self.login_button.clicked.connect(self.login)
         self.register_button.clicked.connect(self.register)
+
     def login(self):
         username = self.username_input.text()
         password = self.password_input.text()
-
         if self.db.validate_login(username, password):
-            self.login_status_label.setText('Login successful!')
-            
-            # Get the index of the dashboard screen from the widget_indices dictionary
-            dashboard_index = self.widget_indices.get('dashboard_screen')
-            
-            # Check if the index exists, to avoid errors
-            if dashboard_index is not None:
-                # Set the dashboard screen as the current widget in the stacked_widget
-                self.stacked_widget.setCurrentIndex(dashboard_index)
-                self.clearInputs()
-            else:
-                print("Error: Dashboard screen index not found.")
+            self.login_status_label.setText('')
+            main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
+            main_window.set_current_user(username)  # Set the current user in MainWindow
+            dashboard_screen = self.stacked_widget.widget(1)
+            dashboard_screen.set_current_user(username)
+            dashboard_screen.update_dashboard()
+            self.stacked_widget.setCurrentIndex(1)
+            self.clearInputs()
             
         else:
             self.login_status_label.setText('Invalid username or password')
-    def login(self):
-        username = self.username_input.text()
-        password = self.password_input.text()
 
         if self.db.validate_login(username, password):
-            # Set object name for styling success messages
-            self.login_status_label.setObjectName("successLabel")
-            self.login_status_label.setText('Login successful!')
-
-            # Refresh the style of the label to apply new objectName
-            self.login_status_label.setStyleSheet(self.login_status_label.styleSheet())
-
-            # Get the index of the dashboard screen from the widget_indices dictionary
-            dashboard_index = self.widget_indices.get('dashboard_screen')
-
-            # Check if the index exists, to avoid errors
-            if dashboard_index is not None:
-                print("Switching to dashboard at index:", dashboard_index)  # Debug print
-                self.stacked_widget.setCurrentIndex(dashboard_index)
-                self.clearInputs()
-            else:
-                print("Error: Dashboard screen index not found.")
-
+            self.login_status_label.setText('')
+            self.stacked_widget.setCurrentIndex(1)
+            self.clearInputs()
         else:
-            # Set object name for styling error messages
-            self.login_status_label.setObjectName("errorLabel")
             self.login_status_label.setText('Invalid username or password')
-            
-            # Refresh the style of the label to apply new objectName
-            self.login_status_label.setStyleSheet(self.login_status_label.styleSheet())
 
     def register(self):
         username = self.username_input.text()

@@ -33,8 +33,9 @@ class MainApp(QApplication):
 
 
         # Initialize and add your screens
-        self.login_screen = LoginScreen(self.stacked_widget, self.db, self.widget_indices)
+        self.login_screen = LoginScreen(self.stacked_widget, self.db, self.widget_indices, self)
         self.widget_indices['login_screen'] = self.stacked_widget.addWidget(self.login_screen)
+
 
         self.dashboard_screen = DashboardScreen(self.stacked_widget, self.widget_indices, self.db, self.current_user)
         self.widget_indices['dashboard_screen'] = self.stacked_widget.addWidget(self.dashboard_screen)
@@ -64,7 +65,7 @@ class MainApp(QApplication):
         self.help_and_support_screen = HelpScreen(self.stacked_widget)
         self.widget_indices['help_and_support_screen'] = self.stacked_widget.addWidget(self.help_and_support_screen)
 
-        self.main_window = MainWindow(self.stacked_widget, self.db, self) # 'self' refers to the instance of MainApp
+        self.main_window = MainWindow(self.db, self) # 'self' refers to the instance of MainApp
         self.widget_indices['main_window'] = self.stacked_widget.addWidget(self.main_window)
 
         self.loadStylesheet("style.qss")
