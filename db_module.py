@@ -22,6 +22,12 @@ class Database:
     def get_user(self, username):
         return self.users.find_one({"username": username})
     
+    def get_user_balance(self, username):
+        user_data = self.get_user(username)
+        if user_data:
+            return user_data.get('balance', 0)
+        return 0    
+
     def user_exists(self, username):
         return self.users.find_one({"username": username}) is not None
 

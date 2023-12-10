@@ -132,6 +132,10 @@ class MainWindow(QtWidgets.QWidget):
         # Hide the current window
         self.hide()
         # Show the dashboard window
+        dashboard_index = self.main_app.widget_indices.get('dashboard_screen')
+        dashboard_screen = self.stacked_widget.widget(dashboard_index)
+        if hasattr(dashboard_screen, 'update_dashboard'):
+            dashboard_screen.update_dashboard()
         self.dashboard_window.show()
 
     def on_user_login(self):
@@ -187,8 +191,6 @@ class MainWindow(QtWidgets.QWidget):
             # Crop from the processed single-channel image (imgDilate)
             imgCrop = imgDilate[pos[1]:pos[1] + original_height, pos[0]:pos[0] + original_width]
             count = cv2.countNonZero(imgCrop)
-
-
             # Adjust this threshold based on your specific needs
             if index in [30, 32, 42, 43]:
                 threshold = 1500
@@ -230,21 +232,29 @@ class MainWindow(QtWidgets.QWidget):
         try:
             space_number = int(self.space_input.text())
             if 0 <= space_number < len(posList):
-                username = self.current_user  # Get the username from the user session
-                print(username)
-                # Use the widget_indices dictionary to get the dashboard screen
+                username = self.current_user
                 dashboard_index = self.main_app.widget_indices.get('dashboard_screen')
                 dashboard_screen = self.stacked_widget.widget(dashboard_index)
 
-                success = self.db.reserve_parking_spot(username, space_number)
-                if success:
-                    reserved_spaces.add(posList[space_number])
-                    self.display_notification("Space reserved successfully.")
-                    if hasattr(dashboard_screen, 'update_dashboard'):
-                        dashboard_screen.update_dashboard()
-                    self.space_input.clear()
+                # Check if the user has sufficient balance
+                if self.db.get_user_balance(username) >= 5:
+                    success = self.db.reserve_parking_spot(username, space_number)
+                    if success:
+                        reserved_spaces.add(posList[space_number])
+                        self.display_notification("Space reserved successfully.")
+
+                        # Deduct $5 from the user's balance
+                        self.db.update_account_balance(username, -5)
+
+                        if hasattr(dashboard_screen, 'update_dashboard'):
+                            dashboard_screen.update_dashboard()
+
+                        self.space_input.clear()
+                    else:
+                        self.display_notification("Space already reserved!")
                 else:
-                    self.display_notification("Space already reserved!")
+                    # Notify the user if they don't have sufficient balance
+                    self.display_notification("Insufficient balance to reserve a space. Please top up your account.")
         except ValueError:
             self.display_notification("Invalid input for space number.")
 
@@ -255,15 +265,24 @@ class MainWindow(QtWidgets.QWidget):
             if 0 <= space_number < len(posList):
                 reserved_space = posList[space_number]
                 dashboard_screen = self.stacked_widget.widget(1)
+                
+                # Check if the user has reserved the space
+                
                 success = self.db.unreserve_parking_spot(self.current_user, space_number)
                 if success:
                     # Only attempt to remove if the space is in the set
                     if reserved_space in reserved_spaces:
                         reserved_spaces.remove(reserved_space)
-                    dashboard_screen.update_dashboard()
+
                     self.update_info_panel()
                     self.space_input.clear()
+
+                    # Refund $5 to the user's balance
+                    self.db.update_account_balance(self.current_user, 5)
+                    dashboard_screen.update_dashboard()
+
                     self.display_notification("Space unreserved successfully.")
+                
                 else:
                     self.display_notification("You have not reserved this space.")
         except ValueError:
