@@ -1,10 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout, QFormLayout
 
 class PaymentInformationScreen(QWidget):
-    def __init__(self, stacked_widget):
+    def __init__(self, stacked_widget, db, main_app):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.initUI()
+        self.db = db
+        self.current_user = None
+        self.main_app = main_app
 
     def initUI(self):
         layout = QVBoxLayout()
@@ -15,26 +18,6 @@ class PaymentInformationScreen(QWidget):
 
         # Form layout for payment details
         form_layout = QFormLayout()
-
-        # Cardholder name
-        self.cardholder_name_input = QLineEdit(self)
-        self.cardholder_name_input.setPlaceholderText("Cardholder Name")
-        form_layout.addRow("Cardholder Name:", self.cardholder_name_input)
-
-        # Card Number
-        self.card_number_input = QLineEdit(self)
-        self.card_number_input.setPlaceholderText("1234 5678 9101 1121")
-        form_layout.addRow("Card Number:", self.card_number_input)
-
-        # Expiry Date
-        self.expiry_date_input = QLineEdit(self)
-        self.expiry_date_input.setPlaceholderText("MM/YY")
-        form_layout.addRow("Expiry Date:", self.expiry_date_input)
-
-        # CVV
-        self.cvv_input = QLineEdit(self)
-        self.cvv_input.setPlaceholderText("123")
-        form_layout.addRow("CVV:", self.cvv_input)
 
         layout.addLayout(form_layout)
 
@@ -48,16 +31,54 @@ class PaymentInformationScreen(QWidget):
         self.back_button.clicked.connect(self.gotoSettingsScreen)
         layout.addWidget(self.back_button)
 
+        # In PaymentInformationScreen class of payment_information_screen.py
+
+        # Add UI elements for credit card input and top-up amount
+        self.card_number_input = QLineEdit(self)
+        self.top_up_amount_input = QLineEdit(self)
+        self.top_up_button = QPushButton('Top Up', self)
+        self.top_up_button.clicked.connect(self.top_up_balance)
+
+        layout.addWidget(QLabel('Card Number:'))
+        layout.addWidget(self.card_number_input)
+        layout.addWidget(QLabel('Top-Up Amount:'))
+        layout.addWidget(self.top_up_amount_input)
+        layout.addWidget(self.top_up_button)
+
         self.setLayout(layout)
 
-    def savePaymentInformation(self):
-        # Here you would collect the payment information and process it (e.g. send to a server)
-        cardholder_name = self.cardholder_name_input.text()
-        card_number = self.card_number_input.text()
-        expiry_date = self.expiry_date_input.text()
-        cvv = self.cvv_input.text()
-        # Process payment information here
-        print("Payment information saved.")
+
+    def top_up_balance(self):
+        card_number = self.card_number_input.text().replace(" ", "")  # Remove spaces if any
+        top_up_amount = self.top_up_amount_input.text()
+
+        # Validate credit card number length
+        if len(card_number) != 16 or not card_number.isdigit():
+            # Show an error message or handle the error appropriately
+            print("Invalid card number. Please enter a 16-digit credit card number.")
+            return
+
+        try:
+            top_up_amount = float(top_up_amount)
+        except ValueError:
+            # Handle invalid top-up amount (not a number)
+            print("Invalid top-up amount. Please enter a valid number.")
+            return
+
+        # Proceed with the top-up if the card number is valid
+        dashboard_index = self.main_app.widget_indices.get('dashboard_screen')
+        dashboard_screen = self.stacked_widget.widget(dashboard_index)
+
+        # Update the balance in the database
+        self.db.update_account_balance(self.current_user, top_up_amount)
+
+        # Clear the inputs and update the dashboard
+        self.card_number_input.clear()
+        self.top_up_amount_input.clear()
+        dashboard_screen.update_balance()
+
+    def set_current_user(self, username):
+        self.current_user = username
 
     def gotoSettingsScreen(self):
         # Delayed import to resolve circular dependency

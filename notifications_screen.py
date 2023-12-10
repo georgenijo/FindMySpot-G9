@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 
 class NotificationsScreen(QWidget):
-    def __init__(self, stacked_widget):
+    def __init__(self, stacked_widget, db):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.initUI()

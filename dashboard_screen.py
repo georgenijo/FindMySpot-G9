@@ -14,6 +14,11 @@ class DashboardScreen(QWidget):
         # Header label
         self.dashboard_label = QLabel('           Dashboard - Reservations', self)
         layout.addWidget(self.dashboard_label)
+
+        # Add an attribute for the balance label in the __init__ method
+        self.balance_label = QLabel('Balance: $0', self)
+        layout.addWidget(self.balance_label)
+
         # Buttons for navigation
         self.ui_button = QPushButton('Camera', self)
         self.ui_button.clicked.connect(self.gotoUI)
@@ -54,8 +59,17 @@ class DashboardScreen(QWidget):
 
     def set_current_user(self, username):
         self.current_user = username
+
+    # Add a method to update the balance display
+    def update_balance(self):
+        balance = self.db.get_user(self.current_user)['balance']
+        self.balance_label.setText(f'Balance: ${balance}')
+
+    # Call update_balance in the update_dashboard method
     def update_dashboard(self):
         self.update_reservations()
+        self.update_balance()  # Update the balance display
+        
     def update_reservations(self):
         # Fetch user's reservations and update the table
         user_reservations = self.db.get_user_reservations(self.current_user)

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
-from googlemaps import Client
+from twilio.rest import Client
 
 class LoginScreen(QWidget):
     def __init__(self, stacked_widget, db, widget_indices):
@@ -40,11 +40,17 @@ class LoginScreen(QWidget):
         password = self.password_input.text()
         if self.db.validate_login(username, password):
             self.login_status_label.setText('')
+
+            payment_screen = self.stacked_widget.widget(5)
+            payment_screen.set_current_user(username)
+
             main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
             main_window.set_current_user(username)  # Set the current user in MainWindow
+
             dashboard_screen = self.stacked_widget.widget(1)
             dashboard_screen.set_current_user(username)
             dashboard_screen.update_dashboard()
+
             self.stacked_widget.setCurrentIndex(1)
             self.clearInputs()
             
@@ -56,12 +62,13 @@ class LoginScreen(QWidget):
             self.clearInputs()
         else:
             self.login_status_label.setText('Invalid username or password')
+            
     def register(self):
         username = self.username_input.text()
         password = self.password_input.text()
         phone = self.phone_number_input.text()  # Get the phone number from input
         if not username or not password or not phone:
-            self.login_status_label.setText("Username, password, and phone cannot be empty")
+            self.login_status_label.setText("Username, password, or phone cannot be empty")
             return
         if self.db.user_exists(username):
             self.login_status_label.setText("Username already exists")
@@ -70,11 +77,12 @@ class LoginScreen(QWidget):
             self.login_status_label.setText("Registration successful")
             self.send_sms_notification(phone)  # Send SMS notification
             self.clearInputs()
+
     def send_sms_notification(self, user_phone):
-        account_sid = 'AC2afec9f9ff38eea3ffa8597b817d7c6f'
-        auth_token = 'fcfb74b91442d8365c784843f1d827a2'
+        account_sid = 'AC2ea1c971ea162d98295bf49cbb1a984f'
+        auth_token = 'a1284fed6431c233d1c0b59849dad731'
         client = Client(account_sid, auth_token)
-        twilio_number = '+18775632287'  # Ensure the number is in E.164 format
+        twilio_number = '+18667262459'  # Ensure the number is in E.164 format
         message_body = 'Welcome! Thank you for registering with FindMySpot.'
         try:
             message = client.messages.create(

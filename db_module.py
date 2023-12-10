@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import bcrypt
 import datetime
+from twilio.rest import Client
 
 class Database:
     def __init__(self):
@@ -9,9 +10,13 @@ class Database:
         self.users = self.db['users']
         self.parking_spots = self.db['parking_spots']  # New collection for parking spots
 
-    def add_user(self, username, password, phone):
+    def add_user(self, username, password, phone=None, initial_balance=0):
+        print(f"Username: {username}, Password: {password}")  # Debugging line
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        self.users.insert_one({"username": username, "password": hashed_password, "phone": phone})
+        user_data = {"username": username, "password": hashed_password, "balance": initial_balance}
+        if phone:
+            user_data["phone"] = phone
+        self.users.insert_one(user_data)
         return True  # Indicate successful addition
 
     def get_user(self, username):
@@ -40,7 +45,18 @@ class Database:
         spot_id = int(spot_id)
         if self.parking_spots.find_one({"spotId": spot_id, "isReserved": True}):
             return False  # Spot is already reserved
-        self.parking_spots.update_one({"spotId": spot_id}, {"$set": {"isReserved": True, "reservedBy": username, "reservationTime": datetime.datetime.now()}}, upsert=True)
+
+        self.parking_spots.update_one(
+            {"spotId": spot_id}, 
+            {"$set": {"isReserved": True, "reservedBy": username, "reservationTime": datetime.datetime.now()}},
+            upsert=True
+        )
+
+        # Send SMS notification if user has a phone number
+        user_data = self.get_user(username)
+        if user_data and 'phone' in user_data:
+            self.send_sms_notification(user_data['phone'], f"You have successfully reserved parking spot number {spot_id}.")
+
         return True  # Reservation successful
     
     def unreserve_parking_spot(self, username, spot_id):
@@ -49,10 +65,37 @@ class Database:
         spot = self.parking_spots.find_one({"spotId": spot_id, "reservedBy": username})
         if spot and spot['isReserved']:
             self.parking_spots.update_one({"spotId": spot_id}, {"$set": {"isReserved": False, "reservedBy": None, "reservationTime": None}})
+
+            # Send SMS notification if user has a phone number
+            user_data = self.get_user(username)
+            if user_data and 'phone' in user_data:
+                self.send_sms_notification(user_data['phone'], f"You have successfully unreserved parking spot number {spot_id}.")
+
             return True  # Unreservation successful
         return False  # Spot not reserved by this user or doesn't exist
-    def add_user(self, username, password, phone):
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        self.users.insert_one({"username": username, "password": hashed_password, "phone": phone})
-        return True  # Indicate successful addition
+    
+    def send_sms_notification(self, user_phone, message_body):
+        account_sid = 'AC2ea1c971ea162d98295bf49cbb1a984f'
+        auth_token = 'a1284fed6431c233d1c0b59849dad731'
+        client = Client(account_sid, auth_token)
+        twilio_number = '+18667262459'  # Ensure the number is in E.164 format
+        try:
+            message = client.messages.create(
+                body=message_body,
+                from_=twilio_number,
+                to=user_phone
+            )
+            print(f"Message sent: {message.sid}")
+        except Exception as e:
+            print(f"Failed to send SMS: {e}")
 
+    def update_account_balance(self, username, amount):
+        # Fetch the user's current balance
+        current_balance = self.users.find_one({"username": username})['balance']
+        # Update the balance with the new amount
+        new_balance = current_balance + amount
+        self.users.update_one({"username": username}, {"$set": {"balance": new_balance}})
+        return True  # Indicate successful balance update
+
+
+    

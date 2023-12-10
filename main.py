@@ -41,17 +41,16 @@ class MainApp(QApplication):
         self.dashboard_screen = DashboardScreen(self.stacked_widget, self.widget_indices, self.db, self.current_user)
         self.widget_indices['dashboard_screen'] = self.stacked_widget.addWidget(self.dashboard_screen)
 
-
         self.settings_screen = SettingsScreen(self.stacked_widget, self)
         self.widget_indices['settings_screen'] = self.stacked_widget.addWidget(self.settings_screen)
 
         self.user_management_screen = UserManagementScreen(self.stacked_widget)
         self.widget_indices['user_management_screen'] = self.stacked_widget.addWidget(self.user_management_screen)
 
-        self.notifications_screen = NotificationsScreen(self.stacked_widget)
+        self.notifications_screen = NotificationsScreen(self.stacked_widget, self.db)
         self.widget_indices['notifications_screen'] = self.stacked_widget.addWidget(self.notifications_screen)
 
-        self.payment_information_screen = PaymentInformationScreen(self.stacked_widget)
+        self.payment_information_screen = PaymentInformationScreen(self.stacked_widget, self.db, self)
         self.widget_indices['payment_information_screen'] = self.stacked_widget.addWidget(self.payment_information_screen)
 
         self.parking_preferences_screen = ParkingPreferencesScreen(self.stacked_widget)
