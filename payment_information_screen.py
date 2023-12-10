@@ -19,18 +19,6 @@ class PaymentInformationScreen(QWidget):
         # Form layout for payment details
         form_layout = QFormLayout()
 
-        layout.addLayout(form_layout)
-
-        # Save Button
-        self.save_button = QPushButton('Save Payment Information', self)
-        self.save_button.clicked.connect(self.savePaymentInformation)
-        layout.addWidget(self.save_button)
-
-        # Back to Settings Button
-        self.back_button = QPushButton('Back to Settings', self)
-        self.back_button.clicked.connect(self.gotoSettingsScreen)
-        layout.addWidget(self.back_button)
-
         # In PaymentInformationScreen class of payment_information_screen.py
 
         # Add UI elements for credit card input and top-up amount
@@ -44,6 +32,12 @@ class PaymentInformationScreen(QWidget):
         layout.addWidget(QLabel('Top-Up Amount:'))
         layout.addWidget(self.top_up_amount_input)
         layout.addWidget(self.top_up_button)
+
+
+        # Back to Settings Button
+        self.back_button = QPushButton('Back to Settings', self)
+        self.back_button.clicked.connect(self.gotoSettingsScreen)
+        layout.addWidget(self.back_button)
 
         self.setLayout(layout)
 

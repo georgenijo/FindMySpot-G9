@@ -17,7 +17,7 @@ from user_management_screen import UserManagementScreen
 from notifications_screen import NotificationsScreen
 from payment_information_screen import PaymentInformationScreen
 from parking_preferences_screen import ParkingPreferencesScreen
-from map_settings_screen import MapSettingsScreen
+
 from privacy_settings_screen import PrivacySettingsScreen
 from help_support_screen import HelpScreen
 from map_services import MapsService
@@ -52,18 +52,6 @@ class MainApp(QApplication):
 
         self.payment_information_screen = PaymentInformationScreen(self.stacked_widget, self.db, self)
         self.widget_indices['payment_information_screen'] = self.stacked_widget.addWidget(self.payment_information_screen)
-
-        self.parking_preferences_screen = ParkingPreferencesScreen(self.stacked_widget)
-        self.widget_indices['parking_preferences_screen'] = self.stacked_widget.addWidget(self.parking_preferences_screen)
-
-        self.map_settings_screen = MapSettingsScreen(self.stacked_widget)
-        self.widget_indices['map_settings_screen'] = self.stacked_widget.addWidget(self.map_settings_screen)
-
-        self.privacy_settings_screen = PrivacySettingsScreen(self.stacked_widget)
-        self.widget_indices['privacy_settings_screen'] = self.stacked_widget.addWidget(self.privacy_settings_screen)
-
-        self.help_and_support_screen = HelpScreen(self.stacked_widget)
-        self.widget_indices['help_and_support_screen'] = self.stacked_widget.addWidget(self.help_and_support_screen)
 
         self.main_window = MainWindow(self.stacked_widget, self.db, self) # 'self' refers to the instance of MainApp
         self.widget_indices['main_window'] = self.stacked_widget.addWidget(self.main_window)

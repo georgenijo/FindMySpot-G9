@@ -44,7 +44,7 @@ class LoginScreen(QWidget):
             payment_screen = self.stacked_widget.widget(5)
             payment_screen.set_current_user(username)
 
-            main_window = self.stacked_widget.widget(10)  # Assuming MainWindow is at index 1
+            main_window = self.stacked_widget.widget(6)  # Assuming MainWindow is at index 1
             main_window.set_current_user(username)  # Set the current user in MainWindow
 
             dashboard_screen = self.stacked_widget.widget(1)
@@ -62,7 +62,7 @@ class LoginScreen(QWidget):
             self.clearInputs()
         else:
             self.login_status_label.setText('Invalid username or password')
-            
+
     def register(self):
         username = self.username_input.text()
         password = self.password_input.text()

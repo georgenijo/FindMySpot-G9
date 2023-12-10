@@ -3,7 +3,6 @@ from user_management_screen import UserManagementScreen
 from notifications_screen import NotificationsScreen
 from payment_information_screen import PaymentInformationScreen
 from parking_preferences_screen import ParkingPreferencesScreen
-from map_settings_screen import MapSettingsScreen
 from privacy_settings_screen import PrivacySettingsScreen
 from help_support_screen import HelpScreen
 
@@ -21,30 +20,15 @@ class SettingsScreen(QWidget):
         # Add buttons for settings options
         settings_buttons = [
             ('User Management', 'Edit'),
-            ('Notifications', 'Edit'),
             ('Payment Information', 'Edit'),
-            ('Parking Preferences', 'Edit'),
-            ('Map Settings', 'Edit'),
-            ('Privacy Settings', 'Edit'),
-            ('Help and Support', 'Edit')
         ]
 
         for option, button_text in settings_buttons:
             button = QPushButton(f'{option} - {button_text}', self)
             if option == 'User Management':
                 button.clicked.connect(self.gotoUserManagementScreen)
-            if option == 'Notifications':
-                button.clicked.connect(self.gotoNotificationsScreen)
             if option == 'Payment Information':
                 button.clicked.connect(self.gotoPaymentInformationScreen)
-            if option == 'Parking Preferences':
-                button.clicked.connect(self.gotoParkingPreferencesScreen)
-            if option == 'Map Settings':
-                button.clicked.connect(self.gotoMapSettingsScreen)
-            if option == 'Privacy Settings':
-                button.clicked.connect(self.gotoPrivacySettingsScreen)
-            if option == 'Help and Support':
-                button.clicked.connect(self.gotoHelpAndSupportScreen)
             else:
                 button.clicked.connect(self.onButtonClick)
             layout.addWidget(button)
