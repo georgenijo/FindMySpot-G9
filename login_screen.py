@@ -70,12 +70,19 @@ class LoginScreen(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
         phone = self.phone_number_input.text()  # Get the phone number from input
+
         if not username or not password or not phone:
             self.login_status_label.setText("Username, password, or phone cannot be empty")
             return
+
+        if len(password) < 4:
+            self.login_status_label.setText("Password must be at least 4 characters long")
+            return
+
         if self.db.user_exists(username):
             self.login_status_label.setText("Username already exists")
             return
+
         if self.db.add_user(username, password, phone):
             self.login_status_label.setText("Registration successful")
             self.send_sms_notification(phone)  # Send SMS notification
