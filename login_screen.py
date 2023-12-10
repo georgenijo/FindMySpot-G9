@@ -44,6 +44,9 @@ class LoginScreen(QWidget):
             payment_screen = self.stacked_widget.widget(5)
             payment_screen.set_current_user(username)
 
+            user_screen = self.stacked_widget.widget(3)
+            user_screen.set_current_user(username)
+
             main_window = self.stacked_widget.widget(6)  # Assuming MainWindow is at index 1
             main_window.set_current_user(username)  # Set the current user in MainWindow
 

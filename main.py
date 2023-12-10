@@ -28,7 +28,7 @@ class MainApp(QApplication):
         self.stacked_widget = QStackedWidget()
         self.widget_indices = {}
 
-        print("Testing Commit.")
+        print("Initializing.")
 
         self.db = Database()
         self.current_user = None
@@ -44,7 +44,7 @@ class MainApp(QApplication):
         self.settings_screen = SettingsScreen(self.stacked_widget, self)
         self.widget_indices['settings_screen'] = self.stacked_widget.addWidget(self.settings_screen)
 
-        self.user_management_screen = UserManagementScreen(self.stacked_widget)
+        self.user_management_screen = UserManagementScreen(self.stacked_widget, self.db)
         self.widget_indices['user_management_screen'] = self.stacked_widget.addWidget(self.user_management_screen)
 
         self.notifications_screen = NotificationsScreen(self.stacked_widget, self.db)

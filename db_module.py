@@ -18,6 +18,22 @@ class Database:
             user_data["phone"] = phone
         self.users.insert_one(user_data)
         return True  # Indicate successful addition
+    
+    def change_username_password(self, current_username, new_username, new_password):
+        user_data = self.get_user(current_username)
+
+        if user_data:
+            # Hash the new password
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+            # Update the username and password
+            self.users.update_one(
+                {"username": current_username},
+                {"$set": {"username": new_username, "password": hashed_password}}
+            )
+            return True
+        else:
+            return False
 
     def get_user(self, username):
         return self.users.find_one({"username": username})
