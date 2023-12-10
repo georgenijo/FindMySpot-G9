@@ -1,9 +1,13 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QStackedWidget
-from PyQt5.QtCore import Qt, QCoreApplication
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QCoreApplication, QUrl
 
 # Set the attribute before creating the QApplication instance
 QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+
+# Set the application name
+QCoreApplication.setApplicationName("FindMySpot")
 
 # Now import the module that requires the attribute to be set
 from PyQt5.QtWebEngineWidgets import QWebEngineView
